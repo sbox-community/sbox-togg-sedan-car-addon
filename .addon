@@ -1,0 +1,25 @@
+{
+  "Title": "Togg Sedan Car",
+  "Type": "addon",
+  "Org": "local",
+  "Ident": "togg_sedan_car",
+  "Tags": "",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "ResourcePaths": [
+    "/materials/*",
+    "/models/*"
+  ],
+  "HasCode": true,
+  "CodePath": "/code/",
+  "RootNamespace": null,
+  "Metadata": {
+    "ParentPackage": "",
+    "RenderMaxs": "0,0,0",
+    "RenderMins": "0,0,0",
+    "PhysicsMaxs": "0,0,0",
+    "PhysicsMins": "0,0,0",
+    "PrimaryAsset": ""
+  }
+}
