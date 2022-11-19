@@ -3,7 +3,7 @@
   "Type": "addon",
   "Org": "alphaceph",
   "Ident": "togg_sedan_car",
-  "Tags": "car,vehicle,runtime",
+  "Tags": "car,vehicle,runtime,entity",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
