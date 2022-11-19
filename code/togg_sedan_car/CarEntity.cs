@@ -452,13 +452,10 @@ namespace sbox.Community
 			wheel2.LocalRotation = wheelRotBackRight;
 			wheel3.LocalRotation = wheelRotBackLeft;
 
-			var comp = Components.Get<ToggCamera>();
-			comp.Update();
+			//var comp = Components.Get<ToggCamera>();
+			//comp.Update();
 
-			EyeRotation = Rotation.From( Angles.Lerp( EyeRotation.Angles(), comp.orbitAngles, extra_lerp ) ); // extra lerp to empower of reality
-
-			EyePosition = comp.carPosition;
-
+			//EyeRotation = Rotation.From( Angles.Lerp( EyeRotation.Angles(), comp.orbitAngles, extra_lerp ) );
 		}
 
 		private void RemoveDriver( AnimatedEntity player )

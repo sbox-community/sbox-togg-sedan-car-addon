@@ -20,7 +20,7 @@ namespace sbox.Community
 		protected virtual float MaxOrbitReturnSpeed => 100.0f;
 		protected virtual float MinCarPitch => -60.0f;
 		protected virtual float MaxCarPitch => 60.0f;
-		protected virtual float CarPitchSmoothingSpeed => 1.0f;
+		protected virtual float CarPitchSmoothingSpeed => 0.4f;
 		protected virtual float CollisionRadius => 8.0f;
 		protected virtual float ShakeSpeed => 200.0f;
 		protected virtual float ShakeSpeedThreshold => 1000.0f;
@@ -91,6 +91,8 @@ namespace sbox.Community
 
 			DoThirdPerson( car, body );
 
+			Position = Vector3.Lerp(Position, carPosition, ToggSedan.extra_lerp);// extra lerp to empower of reality
+
 			currentFov = MaxFovSpeed > 0.0f ? currentFov.LerpTo( MinFov.LerpTo( MaxFov, speedAbs / MaxFovSpeed ), Time.Delta * FovSmoothingSpeed ) : MaxFov;
 			FieldOfView = currentFov;
 
@@ -99,7 +101,9 @@ namespace sbox.Community
 
 		private void DoThirdPerson( ToggSedan car, PhysicsBody body )
 		{
-			Rotation = orbitYawRot * orbitPitchRot;
+			//Rotation = orbitYawRot * orbitPitchRot;
+
+			Rotation = Rotation.From( Angles.Lerp( car.Rotation.Angles(), orbitAngles, ToggSedan.extra_lerp ) ); // extra lerp to empower of reality
 
 			var carPos = car.Position + car.Rotation * (body.LocalMassCenter * car.Scale);
 			var startPos = carPos;
@@ -116,7 +120,7 @@ namespace sbox.Community
 			Viewer = null;
 		}
 
-		/*public override void BuildInput( InputBuilder input )
+		public override void BuildInput( InputBuilder input )
 		{
 			base.BuildInput( input );
 
@@ -137,15 +141,26 @@ namespace sbox.Community
 				orbitEnabled = true;
 				timeSinceOrbit = 0.0f;
 
+				var rotationang = Rotation.Angles();
+
 				orbitAngles.yaw += input.AnalogLook.yaw;
 				orbitAngles.pitch += input.AnalogLook.pitch;
 				orbitAngles = orbitAngles.Normal;
 				orbitAngles.pitch = orbitAngles.pitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
+
+				rotationang.yaw += input.AnalogLook.yaw;
+				rotationang.pitch += input.AnalogLook.pitch;
+				rotationang = rotationang.Normal;
+				rotationang.pitch = rotationang.pitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
+
+
+				Rotation = Rotation.From( rotationang );
+
 			}
 
 			input.ViewAngles = orbitEnabled ? orbitAngles : Entity.Rotation.Angles();
 			input.ViewAngles = input.ViewAngles.Normal;
-		}*/
+		}
 
 		private void ApplyShake( float speed )
 		{
