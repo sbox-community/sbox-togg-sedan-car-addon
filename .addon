@@ -1,25 +1,32 @@
 {
   "Title": "Togg Sedan Car",
   "Type": "addon",
-  "Org": "local",
+  "Org": "alphaceph",
   "Ident": "togg_sedan_car",
-  "Tags": "",
+  "Tags": "car,vehicle",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
   "ResourcePaths": [
     "/materials/*",
-    "/models/*"
+    "/models/*",
+    "/entity/*"
   ],
   "HasCode": true,
   "CodePath": "/code/",
   "RootNamespace": null,
   "Metadata": {
-    "ParentPackage": "",
-    "RenderMaxs": "0,0,0",
-    "RenderMins": "0,0,0",
-    "PhysicsMaxs": "0,0,0",
-    "PhysicsMins": "0,0,0",
-    "PrimaryAsset": ""
+    "ParentPackage": "facepunch.sandbox",
+    "RenderMaxs": "107,44,66",
+    "RenderMins": "-98,-43,10",
+    "PhysicsMaxs": "107,44,66",
+    "PhysicsMins": "-98,-43,10",
+    "PrimaryAsset": "ToggSedan",
+    "ControlModes": null,
+    "Compiler": {
+      "RootNamespace": "Sandbox",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;"
+    }
   }
 }

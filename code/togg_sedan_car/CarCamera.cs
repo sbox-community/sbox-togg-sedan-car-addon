@@ -1,7 +1,8 @@
 ﻿using Sandbox;
 using System;
+namespace Sandbox;
 
-public class CarCameraSon : CameraMode
+public class ToggCamera : CameraMode
 {
 	protected virtual float MinFov => 80.0f;
 	protected virtual float MaxFov => 100.0f;
@@ -14,7 +15,7 @@ public class CarCameraSon : CameraMode
 	protected virtual float MaxOrbitPitch => 70.0f;
 	protected virtual float FixedOrbitPitch => 10.0f;
 	protected virtual float OrbitHeight => 35.0f;
-	protected virtual float OrbitDistance => 150.0f;
+	protected virtual float OrbitDistance => 130.0f;
 	protected virtual float MaxOrbitReturnSpeed => 100.0f;
 	protected virtual float MinCarPitch => -60.0f;
 	protected virtual float MaxCarPitch => 60.0f;

@@ -5,11 +5,14 @@ using System;
 [Library( "ent_car_togg_sedan", Title = "Togg Sedan" )]
 public partial class ToggSedan : Prop, IUse
 {
-	[ConVar.Replicated( "debug_car" )]
+	[ConVar.Replicated( "togg_debug_car" )]
 	public static bool debug_car { get; set; } = false;
 
-	[ConVar.Replicated( "car_accelspeed" )]
+	[ConVar.Replicated( "togg_car_accelspeed" )]
 	public static float car_accelspeed { get; set; } = 500.0f;
+
+	[ConVar.Replicated( "togg_extra_cam_lerp" )]
+	public static float extra_lerp { get; set; } = 0.5f;
 
 	private ToggWheel frontLeft;
 	private ToggWheel frontRight;
@@ -33,7 +36,6 @@ public partial class ToggSedan : Prop, IUse
 	[Net] private float TurnDirection { get; set; }
 	[Net] private float AccelerationTilt { get; set; }
 	[Net] private float TurnLean { get; set; }
-
 	[Net] public float MovementSpeed { get; private set; }
 	[Net] public bool Grounded { get; private set; }
 
@@ -83,7 +85,7 @@ public partial class ToggSedan : Prop, IUse
 
 		var modelName = "models/togg_sedan_vehicle.vmdl";
 
-		Components.Create<CarCameraSon>();
+		Components.Create<ToggCamera>();
 
 		SetModel( modelName );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
@@ -267,7 +269,7 @@ public partial class ToggSedan : Prop, IUse
 		{
 			var forwardSpeed = MathF.Abs( localVelocity.x );
 			var speedFactor = 1.0f - (forwardSpeed / 5000.0f).Clamp( 0.0f, 1.0f );
-			var acceleration = speedFactor * (accelerateDirection < 0.0f ? car_accelspeed * 0.5f : car_accelspeed) * accelerateDirection * dt;
+			var acceleration = speedFactor * (accelerateDirection < 0.0f ? car_accelspeed * 1f : car_accelspeed) * accelerateDirection * dt; //0.5f->1f for breaking
 			var impulse = rotation * new Vector3( acceleration, 0, 0 );
 			body.Velocity += impulse;
 		}
@@ -448,10 +450,10 @@ public partial class ToggSedan : Prop, IUse
 		wheel2.LocalRotation = wheelRotBackRight;
 		wheel3.LocalRotation = wheelRotBackLeft;
 
-		var comp = Components.Get<CarCameraSon>();
+		var comp = Components.Get<ToggCamera>();
 		comp.Update();
 
-		EyeRotation = Rotation.From( comp.orbitAngles );
+		EyeRotation = Rotation.From( Angles.Lerp( EyeRotation.Angles(), comp.orbitAngles , extra_lerp ) ); // extra lerp to empower of reality
 
 		EyePosition = comp.carPosition;
 
@@ -496,7 +498,7 @@ public partial class ToggSedan : Prop, IUse
 
 			Driver = player;
 
-			Components.Get<CarCameraSon>().Activated();
+			Components.Get<ToggCamera>().Activated();
 			player.Client.Pawn = this;
 		}
 
@@ -549,7 +551,7 @@ public partial class ToggSedan : Prop, IUse
 		}
 	}
 
-	[ConCmd.Admin( "spawn_car_togg" )]
+	[ConCmd.Admin( "togg_spawn" )]
 	public static void spawnTogg()
 	{
 		var caller = ConsoleSystem.Caller;
@@ -557,7 +559,7 @@ public partial class ToggSedan : Prop, IUse
 		var Tr = Trace.Ray( caller.Pawn.EyePosition, caller.Pawn.EyePosition + caller.Pawn.EyeRotation.Forward * 200 )
 		.UseHitboxes()
 		.Ignore( caller.Pawn )
-		.Size( 2 )
+		.Size( 1 )
 		.Run();
 
 		var togg = CreateByName<ToggSedan>( "ToggSedan" );
