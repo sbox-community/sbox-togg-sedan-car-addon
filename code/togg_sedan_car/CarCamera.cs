@@ -35,6 +35,7 @@ namespace sbox.Community
 		public float currentFov;
 		public float carPitch;
 		public Vector3 carPosition;
+		private Vector3 lastCarPosition = new();
 
 		public override void Activated()
 		{
@@ -91,7 +92,9 @@ namespace sbox.Community
 
 			DoThirdPerson( car, body );
 
-			Position = Vector3.Lerp(Position, carPosition, ToggSedan.extra_lerp);// extra lerp to empower of reality
+			Position = Vector3.Lerp( Position, carPosition, ToggSedan.extra_lerp - 0.1f ); // extra lerp to empower of reality
+			Position += ((lastCarPosition - car.Position)/10f).ClampLength(2f); // extra to empower of reality 
+			lastCarPosition = car.Position;
 
 			currentFov = MaxFovSpeed > 0.0f ? currentFov.LerpTo( MinFov.LerpTo( MaxFov, speedAbs / MaxFovSpeed ), Time.Delta * FovSmoothingSpeed ) : MaxFov;
 			FieldOfView = currentFov;
@@ -103,7 +106,7 @@ namespace sbox.Community
 		{
 			//Rotation = orbitYawRot * orbitPitchRot;
 
-			Rotation = Rotation.From( Angles.Lerp( car.Rotation.Angles(), orbitAngles, ToggSedan.extra_lerp ) ); // extra lerp to empower of reality
+			Rotation = Rotation.From( Angles.Lerp( car.Rotation.Angles(), orbitAngles, ToggSedan.extra_lerp ) ); // extra lerp to empower of reality ( TODO: in order to fix to rotation; car.Rotation->Rotation to rotation fix )
 
 			var carPos = car.Position + car.Rotation * (body.LocalMassCenter * car.Scale);
 			var startPos = carPos;

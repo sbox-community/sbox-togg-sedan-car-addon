@@ -69,7 +69,7 @@ namespace sbox.Community
 			backRight = new ToggWheel( this );
 		}
 
-		[Net] public Sandbox.AnimatedEntity Driver { get; private set; }
+		[Net] public AnimatedEntity Driver { get; private set; }
 
 		private ModelEntity chassis_axle_rear;
 		private ModelEntity chassis_axle_front;
@@ -83,7 +83,7 @@ namespace sbox.Community
 
 			base.Spawn();
 
-			Predictable = false;
+			Predictable = true;
 
 			var modelName = "models/togg_sedan_vehicle.vmdl";
 
@@ -565,6 +565,5 @@ namespace sbox.Community
 			togg.Position = Tr.EndPosition + new Vector3( 0f, 0f, 20f );
 			togg.Rotation = Rotation.From( new Angles( 0, caller.Pawn.EyeRotation.Angles().yaw + 90, 0 ) );
 		}
-
 	}
 }
