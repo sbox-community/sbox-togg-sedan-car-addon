@@ -21,7 +21,7 @@
     "RenderMins": "-98,-43,10",
     "PhysicsMaxs": "107,44,66",
     "PhysicsMins": "-98,-43,10",
-    "PrimaryAsset": "ToggSedan",
+    "PrimaryAsset": "sbox.Community.ToggSedan",
     "ControlModes": null,
     "Compiler": {
       "RootNamespace": "Sandbox",
