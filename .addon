@@ -10,7 +10,9 @@
   "ResourcePaths": [
     "/materials/*",
     "/models/*",
-    "/entity/*"
+    "/entity/*",
+    "/particles/*",
+    "/code/*"
   ],
   "HasCode": true,
   "CodePath": "/code/",
@@ -27,6 +29,10 @@
       "RootNamespace": "Sandbox",
       "DefineConstants": "SANDBOX;ADDON;DEBUG",
       "NoWarn": "1701;1702;1591;"
-    }
+    },
+    "Summary": "Togg Sedan Car Addon (Experimental)",
+    "Description": "WIP\n\nCurrently, there are not some features like sounds, lights, particles or the driver based things. \n\nAlso, the addon is capable of working with other gamemodes but I have to choice as facepunch.sandbox on \u0022Target Gamemode\u0022 from addon settings in order to compile. Therefore, the addon will not shown on the other gamemode\u0027s addons tab.\n\nhttps://github.com/sbox-community/sbox-togg-sedan-car-addon\n\nConsole Commands:\n-togg_spawn (Admin spawn)\n",
+    "Public": true,
+    "ReplaceTags": "runtime entity"
   }
 }

@@ -1,0 +1,88 @@
+@using System;
+@using Sandbox;
+@using Sandbox.UI;
+
+@namespace sbox.Community
+@attribute [StyleSheet("/CarDashboard.scss")]
+@inherits Panel
+
+@if (Car == null || !Car.IsValid()) return;
+
+<style>
+//Will be removed
+CarDashboard {
+	width: 100%;
+	height: 100%;
+	flex-direction:column;
+	top:25%;
+	left: 1%;
+
+	.info {
+		text-shadow: 1px 1px 1px 1px black;
+		color: white;
+		font-size: 8px;
+		opacity:0.5;
+		padding-bottom:10px;
+	}
+	.frontlight
+	{
+		//background-image: url("/materials/togg_sedan_vehicle/features/front_lights.png");
+		//background-repeat: no-repeat;
+		text-shadow: 1px 1px 1px 1px black;
+		&.True{
+			color: green;
+			sound-in: ui.popup.message.open;
+		}
+		&.False{
+			color: red;
+			sound-in: ui.popup.message.close;
+		}
+	}
+
+	.experimentalcamera {
+		text-shadow: 1px 1px 1px 1px black;
+		&.True
+		{
+			color: green;
+			sound-in: ui.popup.message.open;
+		}
+		&.False {
+			color: red;
+			sound-in: ui.popup.message.close;
+		}
+	}
+}
+</style>
+<div class="info">Press 'ALT' to enable cursor</div>
+<div class="frontlight @(Car.lights.Item1)"><button tooltip="Front Short Lights" active=@(Car.lights.Item1) @onclick=@(() => frontLightSwitch() )>Front Lights: @(Car.lights.Item1 ? "On" : "Off")</button></div>
+<div class="experimentalcamera @(Car.experimental_camera)"><button tooltip="Experimental Camera" active=@(Car.experimental_camera) @onclick=@(() => experimentalCameraSwitch() )>Experimental Camera: @(Car.experimental_camera ? "On" : "Off")</button></div>
+
+
+@code
+{
+	public ToggSedan Car { get; set; }
+
+	public override void Tick()
+	{
+		if (Input.Down(InputButton.Walk))
+			Style.PointerEvents = PointerEvents.All;
+		else
+			Style.PointerEvents = PointerEvents.None;
+
+		if (Car == null || !Car.IsValid())
+		{
+			this.Delete();
+			return;
+		}
+
+		base.Tick();
+	}
+
+	public void frontLightSwitch() => ToggSedan.featuresHandler(0);
+	public void experimentalCameraSwitch() => ToggSedan.featuresHandler(1);
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(Car, Car.lights, Car.experimental_camera);
+	}
+}

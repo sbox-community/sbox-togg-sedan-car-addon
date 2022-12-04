@@ -1,5 +1,10 @@
 ﻿using Sandbox;
+using Sandbox.Internal;
+using Sandbox.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace sbox.Community
 {
@@ -7,20 +12,15 @@ namespace sbox.Community
 	[Library( "ent_car_togg_sedan", Title = "Togg Sedan" )]
 	public partial class ToggSedan : Prop, IUse
 	{
-		[ConVar.Replicated( "togg_debug_car" )]
-		public static bool debug_car { get; set; } = false;
-
-		[ConVar.Replicated( "togg_car_accelspeed" )]
 		public static float car_accelspeed { get; set; } = 500.0f;
+		public static float extra_lerp { get; set; } = 0.5f; //for experimental camera
 
-		[ConVar.Replicated( "togg_extra_cam_lerp" )]
-		public static float extra_lerp { get; set; } = 0.5f;
+		/*public static bool debug_car { get; set; } = false;*/
 
 		private ToggWheel frontLeft;
 		private ToggWheel frontRight;
 		private ToggWheel backLeft;
 		private ToggWheel backRight;
-
 		private float frontLeftDistance;
 		private float frontRightDistance;
 		private float backLeftDistance;
@@ -41,6 +41,22 @@ namespace sbox.Community
 		[Net] public float MovementSpeed { get; private set; }
 		[Net] public bool Grounded { get; private set; }
 
+		//features
+
+		public static CarDashboard dashboard; //clside
+
+		private SpotLightEntity leftFrontLight;
+		private SpotLightEntity rightFrontLight;
+		private SpotLightEntity leftBackLight;
+		private SpotLightEntity rightBackLight;
+
+		private Particles leftFrontLightParticle;
+		private Particles rightFrontLightParticle;
+		private Particles leftBackLightParticle;
+		private Particles rightBackLightParticle;
+
+		[Net] public (bool, bool, bool) lights { get; set; } = new( false, false, false ); //short lights, far lighs, stop lights
+		[Net] public bool experimental_camera { get; set; } = false;
 		private struct InputState
 		{
 			public float throttle;
@@ -80,7 +96,6 @@ namespace sbox.Community
 
 		public override void Spawn()
 		{
-
 			base.Spawn();
 
 			Predictable = true;
@@ -94,6 +109,7 @@ namespace sbox.Community
 
 			EnableSelfCollisions = false;
 
+			spawnFeatures();
 		}
 
 		public override void ClientSpawn()
@@ -143,10 +159,22 @@ namespace sbox.Community
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
-
+			
 			if ( IsServer && Driver is AnimatedEntity player )
 			{
 				RemoveDriver( player );
+			}
+
+			if ( IsServer )
+			{
+				if ( leftFrontLightParticle != null )
+					leftFrontLightParticle.Destroy();
+				if ( rightFrontLightParticle != null )
+					rightFrontLightParticle.Destroy();
+				if ( leftBackLightParticle != null )
+					leftBackLightParticle.Destroy();
+				if ( rightBackLightParticle != null )
+					rightBackLightParticle.Destroy();
 			}
 		}
 
@@ -271,7 +299,7 @@ namespace sbox.Community
 			{
 				var forwardSpeed = MathF.Abs( localVelocity.x );
 				var speedFactor = 1.0f - (forwardSpeed / 5000.0f).Clamp( 0.0f, 1.0f );
-				var acceleration = speedFactor * (accelerateDirection < 0.0f ? car_accelspeed * 1f : car_accelspeed) * accelerateDirection * dt; //0.5f->1f for breaking
+				var acceleration = speedFactor * (accelerateDirection < 0.0f ? car_accelspeed * 0.5f : car_accelspeed) * accelerateDirection * dt; //0.5f->1f for breaking (reverted)
 				var impulse = rotation * new Vector3( acceleration, 0, 0 );
 				body.Velocity += impulse;
 			}
@@ -294,20 +322,20 @@ namespace sbox.Community
 			var vDelta = MathF.Pow( (v.Length / 1000.0f).Clamp( 0, 1 ), 5.0f ).Clamp( 0, 1 );
 			if ( vDelta < 0.01f ) vDelta = 0;
 
-			if ( debug_car )
+			/*if ( debug_car )
 			{
 				DebugOverlay.Line( body.MassCenter, body.MassCenter + rotation.Forward.Normal * 100, Color.White, 0, false );
 				DebugOverlay.Line( body.MassCenter, body.MassCenter + v.Normal * 100, Color.Green, 0, false );
-			}
+			}*/
 
 			var angle = (rotation.Forward.Normal * MathF.Sign( localVelocity.x )).Normal.Dot( v.Normal ).Clamp( 0.0f, 1.0f );
 			angle = angle.LerpTo( 1.0f, 1.0f - vDelta );
 			grip = grip.LerpTo( angle, 1.0f - MathF.Pow( 0.001f, dt ) );
 
-			if ( debug_car )
+			/*if ( debug_car )
 			{
 				DebugOverlay.ScreenText( $"{grip}", new Vector2( 200, 200 ) );
-			}
+			}*/
 
 			var angularDamping = 0.0f;
 			angularDamping = angularDamping.LerpTo( 5.0f, grip );
@@ -336,8 +364,8 @@ namespace sbox.Community
 					.Ignore( this )
 					.Run();
 
-				if ( debug_car )
-					DebugOverlay.Line( tr.StartPosition, tr.EndPosition, tr.Hit ? Color.Red : Color.Green );
+				/*if ( debug_car )
+					DebugOverlay.Line( tr.StartPosition, tr.EndPosition, tr.Hit ? Color.Red : Color.Green );*/
 
 				canAirControl = !tr.Hit;
 			}
@@ -350,8 +378,8 @@ namespace sbox.Community
 					.Ignore( this )
 					.Run();
 
-				if ( debug_car )
-					DebugOverlay.Line( tr.StartPosition, tr.EndPosition );
+				/*if ( debug_car )
+					DebugOverlay.Line( tr.StartPosition, tr.EndPosition );*/
 
 				bool dampen = false;
 
@@ -361,8 +389,8 @@ namespace sbox.Community
 					var roll = tr.Hit ? currentInput.roll.Clamp( -1, 1 ) : airRoll;
 					body.ApplyForceAt( selfBody.MassCenter + rotation.Left * (offset * roll), (rotation.Down * roll) * (roll * (body.Mass * force)) );
 
-					if ( debug_car )
-						DebugOverlay.Sphere( selfBody.MassCenter + rotation.Left * (offset * roll), 8, Color.Red );
+					/*if ( debug_car )
+						DebugOverlay.Sphere( selfBody.MassCenter + rotation.Left * (offset * roll), 8, Color.Red );*/
 
 					dampen = true;
 				}
@@ -372,8 +400,8 @@ namespace sbox.Community
 					var force = 200.0f;
 					body.ApplyForceAt( selfBody.MassCenter + rotation.Forward * (offset * airTilt), (rotation.Down * airTilt) * (airTilt * (body.Mass * force)) );
 
-					if ( debug_car )
-						DebugOverlay.Sphere( selfBody.MassCenter + rotation.Forward * (offset * airTilt), 8, Color.Green );
+					/*if ( debug_car )
+						DebugOverlay.Sphere( selfBody.MassCenter + rotation.Forward * (offset * airTilt), 8, Color.Green );*/
 
 					dampen = true;
 				}
@@ -476,6 +504,8 @@ namespace sbox.Community
 			player.Parent = null;
 			player.Position += Vector3.Up * 100;
 
+			dashboardHandler( To.Single( player ) );
+
 			if ( player.PhysicsBody.IsValid() )
 			{
 				player.PhysicsBody.Enabled = true;
@@ -485,9 +515,9 @@ namespace sbox.Community
 			player.Client.Pawn = player;
 		}
 
-		public bool OnUse( Entity user )
+		public bool OnUse( Entity client )
 		{
-			if ( user is AnimatedEntity player && timeSinceDriverLeft > 1.0f )
+			if ( client is AnimatedEntity player && timeSinceDriverLeft > 1.0f )
 			{
 				player.Parent = this;
 				player.LocalPosition = Vector3.Up * 10;
@@ -499,9 +529,31 @@ namespace sbox.Community
 
 				Components.Get<ToggCamera>().Activated();
 				player.Client.Pawn = this;
+
+				dashboardHandler( To.Single( client ), true, NetworkIdent );
 			}
 
 			return false;
+		}
+
+		[ClientRpc]
+		public static void dashboardHandler( bool enable = false, int networkIdent = 0)
+		{
+			if(enable)
+			{
+				var car =  All.Where( x => x.NetworkIdent == networkIdent );
+
+				if ( !car.Any() )
+					return;
+
+				dashboard = Local.Hud.FindRootPanel().AddChild<CarDashboard>();
+				dashboard.Car = car.FirstOrDefault() as ToggSedan;
+			}
+			else
+			{
+				dashboard.Delete();
+			}
+
 		}
 
 		public bool IsUsable( Entity user )
@@ -548,6 +600,75 @@ namespace sbox.Community
 					}
 				}
 			}
+		}
+
+		// Spawn the features
+
+		private void spawnFeatures()
+		{
+			if(IsServer)
+				spawnLights();
+		}
+
+		[ConCmd.Server]
+		public static void featuresHandler(int flag)
+		{
+			var pawn = ConsoleSystem.Caller.Pawn;
+
+			if ( pawn as ToggSedan is var car )
+			{
+				switch (flag)
+				{
+					case (0): //enable-disable front lights
+						car.enableDisableFrontLigths();
+						break;
+					case (1): //enable-disable experimental camera
+						car.experimental_camera = !car.experimental_camera;
+						break;
+					default: break;
+
+				}
+			}
+		}
+		 
+		private void spawnLights()
+		{
+			leftFrontLight = new();
+			leftFrontLight.Enabled = false;
+			leftFrontLight.DynamicShadows = true;
+			leftFrontLight.Brightness = 30f;
+			leftFrontLight.Parent = this;
+			leftFrontLight.LocalPosition = new Vector3( 2.45f, 0.72f, 0.82f ) * 40.0f;
+			leftFrontLight.Rotation = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
+
+			leftFrontLightParticle = Particles.Create( "particles/togg/head_light.vpcf" );
+			leftFrontLightParticle.EnableDrawing = false;
+			leftFrontLightParticle.SetEntity( 0, leftFrontLight );
+
+			rightFrontLight = new();
+			rightFrontLight.Enabled = false;
+			rightFrontLight.DynamicShadows = true;
+			rightFrontLight.Brightness = 30f;
+			rightFrontLight.Parent = this;
+			rightFrontLight.LocalPosition = new Vector3( 2.45f, -0.68f, 0.82f ) * 40.0f;
+			rightFrontLight.Rotation = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
+
+			rightBackLightParticle = Particles.Create( "particles/togg/head_light.vpcf" );
+			rightBackLightParticle.EnableDrawing = false;
+			rightBackLightParticle.SetEntity( 0, rightFrontLight );
+
+		}
+		private void enableDisableFrontLigths()
+		{
+			var isenabled = lights.Item1;
+
+			leftFrontLight.Enabled = !isenabled;
+			rightFrontLight.Enabled = !isenabled;
+
+			leftFrontLightParticle.EnableDrawing = !isenabled;
+			rightBackLightParticle.EnableDrawing = !isenabled;
+
+			lights = (!isenabled, lights.Item2, lights.Item3);
 		}
 
 		[ConCmd.Admin( "togg_spawn" )]

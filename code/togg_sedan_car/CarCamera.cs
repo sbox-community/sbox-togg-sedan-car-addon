@@ -92,8 +92,14 @@ namespace sbox.Community
 
 			DoThirdPerson( car, body );
 
-			Position = Vector3.Lerp( Position, carPosition, ToggSedan.extra_lerp - 0.1f ); // extra lerp to empower of reality
-			Position += ((lastCarPosition - car.Position)/10f).ClampLength(2f); // extra to empower of reality 
+			if ( car.experimental_camera )
+			{
+				Position = Vector3.Lerp( Position, carPosition, ToggSedan.extra_lerp - 0.1f ); // experimental camera
+				Position += ((lastCarPosition - car.Position) / 10f).ClampLength( 2f ); // experimental camera
+			}
+			else
+				Position = carPosition;
+
 			lastCarPosition = car.Position;
 
 			currentFov = MaxFovSpeed > 0.0f ? currentFov.LerpTo( MinFov.LerpTo( MaxFov, speedAbs / MaxFovSpeed ), Time.Delta * FovSmoothingSpeed ) : MaxFov;
@@ -104,9 +110,10 @@ namespace sbox.Community
 
 		private void DoThirdPerson( ToggSedan car, PhysicsBody body )
 		{
-			//Rotation = orbitYawRot * orbitPitchRot;
-
-			Rotation = Rotation.From( Angles.Lerp( car.Rotation.Angles(), orbitAngles, ToggSedan.extra_lerp ) ); // extra lerp to empower of reality ( TODO: in order to fix to rotation; car.Rotation->Rotation to rotation fix )
+			if ( car.experimental_camera )
+				Rotation = Rotation.From( Angles.Lerp( car.Rotation.Angles(), orbitAngles, ToggSedan.extra_lerp ) ); // experimental camera ( TODO: in order to fix to rotation; car.Rotation->Rotation to rotation fix )
+			else
+				Rotation = orbitYawRot * orbitPitchRot;
 
 			var carPos = car.Position + car.Rotation * (body.LocalMassCenter * car.Scale);
 			var startPos = carPos;

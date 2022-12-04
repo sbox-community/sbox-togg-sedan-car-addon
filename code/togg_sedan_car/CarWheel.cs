@@ -35,7 +35,7 @@ namespace sbox.Community
 			wheel = length * tr.Fraction;
 			var wheelRadius = (14 * parent.Scale);
 
-			if ( !doPhysics && ToggSedan.debug_car )
+			/*if ( !doPhysics && ToggSedan.debug_car )
 			{
 				var wheelPosition = tr.Hit ? tr.EndPosition : wheelExtend;
 				wheelPosition += rotation.Up * wheelRadius;
@@ -50,7 +50,7 @@ namespace sbox.Community
 					DebugOverlay.Circle( wheelPosition, rotation * Rotation.FromYaw( 90 ), wheelRadius, Color.Green.WithAlpha( 0.5f ), 0, false );
 					DebugOverlay.Line( wheelAttachPos, wheelExtend, Color.Green, 0, false );
 				}
-			}
+			}*/
 
 			if ( !tr.Hit || !doPhysics )
 			{
