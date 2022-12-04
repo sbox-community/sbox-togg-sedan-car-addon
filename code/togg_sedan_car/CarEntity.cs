@@ -50,12 +50,22 @@ namespace sbox.Community
 		private SpotLightEntity leftBackLight;
 		private SpotLightEntity rightBackLight;
 
+		private SpotLightEntity leftFrontHeadlight;
+		private SpotLightEntity rightFrontHeadlight;
+		private SpotLightEntity leftBackHeadlightight;
+		private SpotLightEntity rightBackHeadlight;
+
 		private Particles leftFrontLightParticle;
 		private Particles rightFrontLightParticle;
 		private Particles leftBackLightParticle;
 		private Particles rightBackLightParticle;
 
-		[Net] public (bool, bool, bool) lights { get; set; } = new( false, false, false ); //short lights, far lighs, stop lights
+		private Particles leftFrontHeadlightParticle;
+		private Particles rightFrontHeadlightParticle;
+		private Particles leftBackHeadlightParticle;
+		private Particles rightBackHeadlightParticle;
+
+		[Net] public (bool, bool, bool) lights { get; set; } = new( false, false, false ); //short lights, headlights, stop lights
 		[Net] public bool experimental_camera { get; set; } = false;
 		private struct InputState
 		{
@@ -175,6 +185,11 @@ namespace sbox.Community
 					leftBackLightParticle.Destroy();
 				if ( rightBackLightParticle != null )
 					rightBackLightParticle.Destroy();
+
+				if ( leftFrontHeadlightParticle != null )
+					leftFrontHeadlightParticle.Destroy();
+				if ( rightFrontHeadlightParticle != null )
+					rightFrontHeadlightParticle.Destroy();
 			}
 		}
 
@@ -622,7 +637,10 @@ namespace sbox.Community
 					case (0): //enable-disable front lights
 						car.enableDisableFrontLigths();
 						break;
-					case (1): //enable-disable experimental camera
+					case (1): //enable-disable headlights
+						car.enableDisableHeadlights();
+						break;
+					case (2): //enable-disable experimental camera
 						car.experimental_camera = !car.experimental_camera;
 						break;
 					default: break;
@@ -636,7 +654,7 @@ namespace sbox.Community
 			leftFrontLight = new();
 			leftFrontLight.Enabled = false;
 			leftFrontLight.DynamicShadows = true;
-			leftFrontLight.Brightness = 30f;
+			leftFrontLight.Brightness = 10f;
 			leftFrontLight.Parent = this;
 			leftFrontLight.LocalPosition = new Vector3( 2.45f, 0.72f, 0.82f ) * 40.0f;
 			leftFrontLight.Rotation = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
@@ -648,7 +666,7 @@ namespace sbox.Community
 			rightFrontLight = new();
 			rightFrontLight.Enabled = false;
 			rightFrontLight.DynamicShadows = true;
-			rightFrontLight.Brightness = 30f;
+			rightFrontLight.Brightness = 10f;
 			rightFrontLight.Parent = this;
 			rightFrontLight.LocalPosition = new Vector3( 2.45f, -0.68f, 0.82f ) * 40.0f;
 			rightFrontLight.Rotation = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
@@ -656,6 +674,30 @@ namespace sbox.Community
 			rightBackLightParticle = Particles.Create( "particles/togg/head_light.vpcf" );
 			rightBackLightParticle.EnableDrawing = false;
 			rightBackLightParticle.SetEntity( 0, rightFrontLight );
+
+			leftFrontHeadlight = new();
+			leftFrontHeadlight.Enabled = false;
+			leftFrontHeadlight.DynamicShadows = true;
+			leftFrontHeadlight.Brightness = 30f;
+			leftFrontHeadlight.Parent = this;
+			leftFrontHeadlight.LocalPosition = new Vector3( 2.29f, 0.86f, 0.85f ) * 40.0f;
+			leftFrontHeadlight.Rotation = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
+
+			leftFrontHeadlightParticle = Particles.Create( "particles/togg/head_light.vpcf" );
+			leftFrontHeadlightParticle.EnableDrawing = false;
+			leftFrontHeadlightParticle.SetEntity( 0, leftFrontHeadlight );
+
+			rightFrontHeadlight = new();
+			rightFrontHeadlight.Enabled = false;
+			rightFrontHeadlight.DynamicShadows = true;
+			rightFrontHeadlight.Brightness = 30f;
+			rightFrontHeadlight.Parent = this;
+			rightFrontHeadlight.LocalPosition = new Vector3( 2.29f, -0.82f, 0.85f ) * 40.0f;
+			rightFrontHeadlight.Rotation = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
+
+			rightFrontHeadlightParticle = Particles.Create( "particles/togg/head_light.vpcf" );
+			rightFrontHeadlightParticle.EnableDrawing = false;
+			rightFrontHeadlightParticle.SetEntity( 0, rightFrontHeadlight );
 
 		}
 		private void enableDisableFrontLigths()
@@ -669,6 +711,19 @@ namespace sbox.Community
 			rightBackLightParticle.EnableDrawing = !isenabled;
 
 			lights = (!isenabled, lights.Item2, lights.Item3);
+		}
+
+		private void enableDisableHeadlights()
+		{
+			var isenabled = lights.Item2;
+
+			leftFrontHeadlight.Enabled = !isenabled;
+			rightFrontHeadlight.Enabled = !isenabled;
+
+			leftFrontHeadlightParticle.EnableDrawing = !isenabled;
+			rightFrontHeadlightParticle.EnableDrawing = !isenabled;
+
+			lights = (lights.Item1, !isenabled, lights.Item3);
 		}
 
 		[ConCmd.Admin( "togg_spawn" )]

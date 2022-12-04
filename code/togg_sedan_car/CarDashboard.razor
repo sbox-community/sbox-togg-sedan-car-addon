@@ -53,10 +53,11 @@ CarDashboard {
 	}
 }
 </style>
-<div class="info">Press 'ALT' to enable cursor</div>
-<div class="frontlight @(Car.lights.Item1)"><button tooltip="Front Short Lights" active=@(Car.lights.Item1) @onclick=@(() => frontLightSwitch() )>Front Lights: @(Car.lights.Item1 ? "On" : "Off")</button></div>
-<div class="experimentalcamera @(Car.experimental_camera)"><button tooltip="Experimental Camera" active=@(Car.experimental_camera) @onclick=@(() => experimentalCameraSwitch() )>Experimental Camera: @(Car.experimental_camera ? "On" : "Off")</button></div>
 
+<div class="info">Press 'ALT' to enable cursor</div>
+<div class="frontlight @(Car.lights.Item1)"><button tooltip="Front Lights" active=@(Car.lights.Item1) @onclick=@(() => frontLightSwitch() )>Front Lights: @(Car.lights.Item1 ? "On" : "Off")</button></div>
+<div class="frontlight @(Car.lights.Item2)"><button tooltip="Headlights" active=@(Car.lights.Item2) @onclick=@(() => headlightSwitch() )>Headlights: @(Car.lights.Item2 ? "On" : "Off")</button></div>
+<div class="experimentalcamera @(Car.experimental_camera)"><button tooltip="Experimental Camera" active=@(Car.experimental_camera) @onclick=@(() => experimentalCameraSwitch() )>Experimental Camera: @(Car.experimental_camera ? "On" : "Off")</button></div>
 
 @code
 {
@@ -79,7 +80,8 @@ CarDashboard {
 	}
 
 	public void frontLightSwitch() => ToggSedan.featuresHandler(0);
-	public void experimentalCameraSwitch() => ToggSedan.featuresHandler(1);
+	public void headlightSwitch() => ToggSedan.featuresHandler(1);
+	public void experimentalCameraSwitch() => ToggSedan.featuresHandler(2);
 
 	protected override int BuildHash()
 	{
