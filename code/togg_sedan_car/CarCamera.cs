@@ -130,14 +130,14 @@ namespace sbox.Community
 			Viewer = null;
 		}
 
-		public override void BuildInput( InputBuilder input )
+		public override void BuildInput()
 		{
-			base.BuildInput( input );
+			base.BuildInput();
 
 			var pawn = Local.Pawn;
 			if ( pawn == null ) return;
 
-			if ( (Math.Abs( input.AnalogLook.pitch ) + Math.Abs( input.AnalogLook.yaw )) > 0.0f )
+			if ( (Math.Abs( Input.AnalogLook.pitch ) + Math.Abs( Input.AnalogLook.yaw )) > 0.0f )
 			{
 				if ( !orbitEnabled )
 				{
@@ -153,13 +153,13 @@ namespace sbox.Community
 
 				var rotationang = Rotation.Angles();
 
-				orbitAngles.yaw += input.AnalogLook.yaw;
-				orbitAngles.pitch += input.AnalogLook.pitch;
+				orbitAngles.yaw += Input.AnalogLook.yaw;
+				orbitAngles.pitch += Input.AnalogLook.pitch;
 				orbitAngles = orbitAngles.Normal;
 				orbitAngles.pitch = orbitAngles.pitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
 
-				rotationang.yaw += input.AnalogLook.yaw;
-				rotationang.pitch += input.AnalogLook.pitch;
+				rotationang.yaw += Input.AnalogLook.yaw;
+				rotationang.pitch += Input.AnalogLook.pitch;
 				rotationang = rotationang.Normal;
 				rotationang.pitch = rotationang.pitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
 
@@ -167,9 +167,8 @@ namespace sbox.Community
 				Rotation = Rotation.From( rotationang );
 
 			}
-
-			input.ViewAngles = orbitEnabled ? orbitAngles : Entity.Rotation.Angles();
-			input.ViewAngles = input.ViewAngles.Normal;
+			//pawn.ViewAngles = orbitEnabled ? orbitAngles : Entity.Rotation.Angles(); // ViewAngles not exists
+			//pawn.Rotation = Rotation.From( orbitEnabled ? orbitAngles : Entity.Rotation.Angles() );
 		}
 
 		private void ApplyShake( float speed )

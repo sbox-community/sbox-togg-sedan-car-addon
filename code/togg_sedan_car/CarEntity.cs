@@ -239,7 +239,9 @@ namespace sbox.Community
 			Driver.SetAnimParameter( "b_noclip", false );
 			Driver.SetAnimParameter( "sit", 1 );
 
-			var aimRotation = Input.Rotation.Clamp( Driver.Rotation, 90 );
+			//TODO: validate
+			var viewRotation = Driver.Rotation;
+			var aimRotation = viewRotation.Clamp( Driver.Rotation, 90f );
 
 			var aimPos = Driver.EyePosition + aimRotation.Forward * 200;
 			var localPos = new Transform( Driver.EyePosition, Driver.Rotation ).PointToLocal( aimPos );
