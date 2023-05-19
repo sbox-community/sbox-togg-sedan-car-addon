@@ -1,10 +1,7 @@
 ﻿using Sandbox;
-using Sandbox.Internal;
-using Sandbox.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+
 
 namespace sbox.Community
 {
@@ -12,6 +9,7 @@ namespace sbox.Community
 	[Library( "ent_car_togg_sedan", Title = "Togg Sedan" )]
 	public partial class ToggSedan : Prop, IUse
 	{
+		private ToggCamera CarCam;
 		public static float car_accelspeed { get; set; } = 500.0f;
 		public static float extra_lerp { get; set; } = 0.5f; //for experimental camera
 
@@ -96,8 +94,9 @@ namespace sbox.Community
 		}
 
 		[Net] public AnimatedEntity Driver { get; private set; }
+		public bool AmIDriver => Driver != null && Driver.Client != null && Driver.Client == Game.LocalClient;
 
-		private ModelEntity chassis_axle_rear;
+	private ModelEntity chassis_axle_rear;
 		private ModelEntity chassis_axle_front;
 		private ModelEntity wheel0;
 		private ModelEntity wheel1;
@@ -112,7 +111,7 @@ namespace sbox.Community
 
 			var modelName = "models/togg_sedan_vehicle.vmdl";
 
-			Components.Create<ToggCamera>();
+			CarCam = new ToggCamera();
 
 			SetModel( modelName );
 			SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
@@ -164,18 +163,21 @@ namespace sbox.Community
 					wheel3.SetParent( chassis_axle_rear, "Axle_Rear_Center", new Transform( Vector3.Right * (0.76f * 43), Rotation.From( 0, -90, 0 ) ) );
 				}
 			}
+
+			CarCam = new ToggCamera();
+			CarCam.Car = this;
 		}
 
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
 			
-			if ( IsServer && Driver is AnimatedEntity player )
+			if ( Game.IsServer && Driver is AnimatedEntity player )
 			{
 				RemoveDriver( player );
 			}
 
-			if ( IsServer )
+			if ( Game.IsServer )
 			{
 				if ( leftFrontLightParticle != null )
 					leftFrontLightParticle.Destroy();
@@ -207,16 +209,16 @@ namespace sbox.Community
 			}
 		}
 
-		public override void Simulate( Client client )
+		public override void Simulate( IClient client )
 		{
 			SimulateDriver( client );
 		}
 
-		void SimulateDriver( Client client )
+		void SimulateDriver( IClient client )
 		{
 			if ( !Driver.IsValid() ) return;
 
-			if ( IsServer )
+			if ( Game.IsServer )
 			{
 				if ( Input.Pressed( InputButton.Use ) )
 				{
@@ -240,11 +242,13 @@ namespace sbox.Community
 			Driver.SetAnimParameter( "sit", 1 );
 
 			//TODO: validate
-			var viewRotation = Driver.Rotation;
+			var viewRotation = Rotation;
 			var aimRotation = viewRotation.Clamp( Driver.Rotation, 90f );
 
-			var aimPos = Driver.EyePosition + aimRotation.Forward * 200;
-			var localPos = new Transform( Driver.EyePosition, Driver.Rotation ).PointToLocal( aimPos );
+			var ray = Driver.AimRay;
+
+			var aimPos = ray.Position + aimRotation.Forward * 200;
+			var localPos = new Transform( ray.Position, Driver.Rotation ).PointToLocal( aimPos );
 
 			Driver.SetAnimParameter( "aim_eyes", localPos );
 			Driver.SetAnimParameter( "aim_head", localPos );
@@ -262,17 +266,10 @@ namespace sbox.Community
 			}*/
 		}
 
-		/*public override void FrameSimulate( Client client )
-		{
-			base.FrameSimulate( client );
-
-			Driver?.FrameSimulate( client );
-		}*/
-
 		[Event.Physics.PreStep]
 		public void OnPrePhysicsStep()
 		{
-			if ( !IsServer )
+			if ( !Game.IsServer )
 				return;
 
 			var selfBody = PhysicsBody;
@@ -328,7 +325,7 @@ namespace sbox.Community
 
 			if ( fullyGrounded )
 			{
-				body.Velocity += Map.Physics.Gravity * dt;
+				body.Velocity += Game.PhysicsWorld.Gravity * dt;
 			}
 
 			body.GravityScale = fullyGrounded ? 0 : 1;
@@ -473,9 +470,11 @@ namespace sbox.Community
 		float wheelAngle = 0.0f;
 		float wheelRevolute = 0.0f;
 
-		[Event.Frame]
+		[Event.Client.Frame]
 		public void OnFrame()
 		{
+			//TODO: distance check
+
 			wheelAngle = wheelAngle.LerpTo( TurnDirection * 25, 1.0f - MathF.Pow( 0.001f, Time.Delta ) );
 			wheelRevolute += (WheelSpeed / (14.0f * Scale)).RadianToDegree() * Time.Delta;
 
@@ -497,15 +496,22 @@ namespace sbox.Community
 			wheel2.LocalRotation = wheelRotBackRight;
 			wheel3.LocalRotation = wheelRotBackLeft;
 
-			//var comp = Components.Get<ToggCamera>();
-			//comp.Update();
+			if ( AmIDriver )
+				CarCam.Update();
 
 			//EyeRotation = Rotation.From( Angles.Lerp( EyeRotation.Angles(), comp.orbitAngles, extra_lerp ) );
 		}
 
+		[Event.Client.BuildInput]
+		public void CarBuildInput()
+		{
+			if ( AmIDriver )
+				CarCam.BuildInput();
+		}
+
 		private void RemoveDriver( AnimatedEntity player )
 		{
-			if ( !IsServer )
+			if ( !Game.IsServer )
 				return;
 
 			Driver?.SetAnimParameter( "sit", 0 );
@@ -544,7 +550,10 @@ namespace sbox.Community
 
 				Driver = player;
 
-				Components.Get<ToggCamera>().Activated();
+				//Components.GetOrCreate<ToggCamera>();
+				CarCam = new();
+				CarCam.Car = this;
+				CarCam.Activate();
 				player.Client.Pawn = this;
 
 				dashboardHandler( To.Single( client ), true, NetworkIdent );
@@ -563,7 +572,7 @@ namespace sbox.Community
 				if ( !car.Any() )
 					return;
 
-				dashboard = Local.Hud.FindRootPanel().AddChild<CarDashboard>();
+				dashboard = Game.RootPanel.FindRootPanel().AddChild<CarDashboard>();
 				dashboard.Car = car.FirstOrDefault() as ToggSedan;
 			}
 			else
@@ -580,7 +589,7 @@ namespace sbox.Community
 
 		protected override void OnPhysicsCollision( CollisionEventData eventData )
 		{
-			if ( !IsServer )
+			if ( !Game.IsServer )
 				return;
 
 			var other = eventData.Other;
@@ -604,8 +613,8 @@ namespace sbox.Community
 				{
 					var damage = speed / minImpactSpeed * impactDmg * 1.2f;
 					other.Entity.TakeDamage( DamageInfo.Generic( damage )
-						.WithFlag( DamageFlags.PhysicsImpact )
-						.WithFlag( DamageFlags.Vehicle )
+						//.WithFlag( DamageFlags.PhysicsImpact )//TODO
+						//.WithFlag( DamageFlags.Vehicle )//TODO
 						.WithAttacker( Driver != null ? Driver : this, Driver != null ? this : null )
 						.WithPosition( eventData.Position )
 						.WithForce( other.PreVelocity ) );
@@ -623,7 +632,7 @@ namespace sbox.Community
 
 		private void spawnFeatures()
 		{
-			if(IsServer)
+			if(Game.IsServer)
 				spawnLights();
 		}
 
@@ -731,17 +740,17 @@ namespace sbox.Community
 		[ConCmd.Admin( "togg_spawn" )]
 		public static void spawnTogg()
 		{
-			var caller = ConsoleSystem.Caller;
+			var caller = ConsoleSystem.Caller?.Pawn as Player;
 
-			var Tr = Trace.Ray( caller.Pawn.EyePosition, caller.Pawn.EyePosition + caller.Pawn.EyeRotation.Forward * 200 )
+			var Tr = Trace.Ray( caller.EyePosition, caller.EyePosition + caller.EyeRotation.Forward * 200 )
 			.UseHitboxes()
-			.Ignore( caller.Pawn )
+			.Ignore( caller )
 			.Size( 1 )
 			.Run();
 
 			var togg = CreateByName<ToggSedan>( "ToggSedan" );
 			togg.Position = Tr.EndPosition + new Vector3( 0f, 0f, 20f );
-			togg.Rotation = Rotation.From( new Angles( 0, caller.Pawn.EyeRotation.Angles().yaw + 90, 0 ) );
+			togg.Rotation = Rotation.From( new Angles( 0, caller.EyeRotation.Angles().yaw + 90, 0 ) );
 		}
 	}
 }

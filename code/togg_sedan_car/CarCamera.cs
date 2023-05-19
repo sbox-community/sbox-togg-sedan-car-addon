@@ -1,10 +1,13 @@
 ﻿using Sandbox;
 using System;
+using Sandbox.Utility;
 
 namespace sbox.Community
 {
-	public class ToggCamera : CameraMode
+	public class ToggCamera : IComponent
 	{
+		public Entity Car;
+
 		protected virtual float MinFov => 80.0f;
 		protected virtual float MaxFov => 100.0f;
 		protected virtual float MaxFovSpeed => 1000.0f;
@@ -27,6 +30,14 @@ namespace sbox.Community
 		protected virtual float ShakeMaxSpeed => 2500.0f;
 		protected virtual float ShakeMaxLength => 2.0f;
 
+		public bool Enabled { get; set; } = true;
+
+		public bool IsClientOnly => false;
+
+		public bool IsServerOnly => true;
+
+		public string Name { get; set; } = "ToggCamera";
+
 		public bool orbitEnabled;
 		public TimeSince timeSinceOrbit;
 		public Angles orbitAngles;
@@ -37,7 +48,11 @@ namespace sbox.Community
 		public Vector3 carPosition;
 		private Vector3 lastCarPosition = new();
 
-		public override void Activated()
+		private Vector3 Position = new();
+		private Rotation Rotation = new();
+		private float FieldOfView = 0f;
+
+		public void Activate()
 		{
 			orbitEnabled = false;
 			timeSinceOrbit = 0.0f;
@@ -47,28 +62,25 @@ namespace sbox.Community
 			currentFov = MinFov;
 			carPitch = 0;
 
-			orbitYawRot = Rotation.FromYaw( Entity.Rotation.Yaw() );
+			orbitYawRot = Rotation.FromYaw( Car.Rotation.Yaw() );
 			orbitPitchRot = Rotation.Identity;
 			orbitAngles = (orbitYawRot * orbitPitchRot).Angles();
 		}
 
-		public override void Update()
+		public void Update()
 		{
-			var car = Entity as ToggSedan;
+			var car = Car as ToggSedan;
 			if ( !car.IsValid() ) return;
-
 			var body = car.PhysicsBody;
 			if ( !body.IsValid() ) return;
 
 			var speed = car.MovementSpeed;
 			var speedAbs = Math.Abs( speed );
-
 			if ( orbitEnabled && timeSinceOrbit > OrbitCooldown )
 				orbitEnabled = false;
 
 			var carRot = car.Rotation;
 			carPitch = carPitch.LerpTo( car.Grounded ? carRot.Pitch().Clamp( MinCarPitch, MaxCarPitch ) * (speed < 0.0f ? -1.0f : 1.0f) : 0.0f, Time.Delta * CarPitchSmoothingSpeed );
-
 			if ( orbitEnabled )
 			{
 				var slerpAmount = Time.Delta * OrbitSmoothingSpeed;
@@ -89,7 +101,6 @@ namespace sbox.Community
 				orbitAngles.yaw = orbitYawRot.Yaw();
 				orbitAngles = orbitAngles.Normal;
 			}
-
 			DoThirdPerson( car, body );
 
 			if ( car.experimental_camera )
@@ -106,6 +117,7 @@ namespace sbox.Community
 			FieldOfView = currentFov;
 
 			ApplyShake( speedAbs );
+			FrameSimulate();
 		}
 
 		private void DoThirdPerson( ToggSedan car, PhysicsBody body )
@@ -127,14 +139,12 @@ namespace sbox.Community
 
 			carPosition = tr.EndPosition;
 
-			Viewer = null;
+			//Viewer = null;
 		}
 
-		public override void BuildInput()
+		public void BuildInput()
 		{
-			base.BuildInput();
-
-			var pawn = Local.Pawn;
+			var pawn = Game.LocalPawn;
 			if ( pawn == null ) return;
 
 			if ( (Math.Abs( Input.AnalogLook.pitch ) + Math.Abs( Input.AnalogLook.yaw )) > 0.0f )
@@ -169,6 +179,17 @@ namespace sbox.Community
 			}
 			//pawn.ViewAngles = orbitEnabled ? orbitAngles : Entity.Rotation.Angles(); // ViewAngles not exists
 			//pawn.Rotation = Rotation.From( orbitEnabled ? orbitAngles : Entity.Rotation.Angles() );
+		}
+
+		public void FrameSimulate()
+		{
+			Camera.Rotation = Rotation;
+			Camera.Position = Position;
+			Camera.FieldOfView = FieldOfView;
+			Camera.FirstPersonViewer = null;
+			//Camera.FirstPersonViewer = this;
+			//Camera.ZNear = 1f;
+			//Camera.ZFar = 5000.0f;
 		}
 
 		private void ApplyShake( float speed )

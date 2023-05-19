@@ -1,7 +1,6 @@
 ﻿using Sandbox;
 using System;
 
-
 namespace sbox.Community
 {
 	struct ToggWheel
