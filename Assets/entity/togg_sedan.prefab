@@ -1,0 +1,910 @@
+{
+  "RootObject": {
+    "__guid": "142bdfeb-5940-4277-bcdb-58fdcc7c7768",
+    "__version": 2,
+    "Flags": 0,
+    "Name": "togg_sedan",
+    "Position": "0,0,0",
+    "Rotation": "0,0,0,1",
+    "Scale": "1,1,1",
+    "Tags": "",
+    "Enabled": true,
+    "NetworkMode": 1,
+    "NetworkFlags": 0,
+    "NetworkOrphaned": 0,
+    "NetworkTransmit": true,
+    "OwnerTransfer": 0,
+    "Components": [
+      {
+        "__type": "Sandbox.SkinnedModelRenderer",
+        "__guid": "0058d10d-51ae-49b4-9c89-99e6df1cd0ef",
+        "__enabled": true,
+        "Flags": 0,
+        "AnimationGraph": null,
+        "BodyGroups": 18446744073709551615,
+        "BoneMergeTarget": null,
+        "CreateAttachments": false,
+        "CreateBoneObjects": false,
+        "LodOverride": null,
+        "MaterialGroup": null,
+        "MaterialOverride": null,
+        "Materials": null,
+        "Model": "models/togg_sedan_vehicle.vmdl",
+        "Morphs": {},
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "Parameters": {
+          "bools": {},
+          "ints": {},
+          "floats": {},
+          "vectors": {},
+          "rotations": {}
+        },
+        "PlaybackRate": 1,
+        "RenderOptions": {
+          "GameLayer": true,
+          "OverlayLayer": false,
+          "BloomLayer": false,
+          "AfterUILayer": false
+        },
+        "RenderType": "On",
+        "Sequence": {
+          "Name": null,
+          "Looping": true,
+          "Blending": false
+        },
+        "Tint": "1,1,1,1",
+        "UseAnimGraph": false
+      },
+      {
+        "__type": "Sandbox.ModelCollider",
+        "__guid": "411ae549-6efc-47de-9cb3-b6ed8d5e079e",
+        "__enabled": true,
+        "Flags": 0,
+        "ColliderFlags": 0,
+        "Elasticity": null,
+        "Friction": null,
+        "IsTrigger": false,
+        "Model": "models/togg_sedan_vehicle.vmdl",
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OnObjectTriggerEnter": null,
+        "OnObjectTriggerExit": null,
+        "OnTriggerEnter": null,
+        "OnTriggerExit": null,
+        "RollingResistance": null,
+        "Static": false,
+        "Surface": null,
+        "SurfaceVelocity": "0,0,0"
+      },
+      {
+        "__type": "Sandbox.Rigidbody",
+        "__guid": "cfdd5ea2-de14-4677-82db-0275fb6dd168",
+        "__enabled": true,
+        "Flags": 0,
+        "AngularDamping": 0,
+        "EnableImpactDamage": true,
+        "EnhancedCcd": false,
+        "Gravity": true,
+        "GravityScale": 1,
+        "ImpactDamage": 0,
+        "LinearDamping": 0,
+        "Locking": {
+          "X": false,
+          "Y": false,
+          "Z": false,
+          "Pitch": false,
+          "Yaw": false,
+          "Roll": false
+        },
+        "MassCenterOverride": "0,0,0",
+        "MassOverride": 0,
+        "MinImpactDamageSpeed": 500,
+        "MotionEnabled": true,
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "OverrideMassCenter": false,
+        "RigidbodyFlags": 0,
+        "StartAsleep": false
+      },
+      {
+        "__type": "ToggSedan",
+        "__guid": "6464ae6b-62ef-4622-8aa5-6868d64e8f2a",
+        "__enabled": true,
+        "Flags": 0,
+        "AccelerateSpeed": 500,
+        "driverExitPoint": {
+          "_type": "gameobject",
+          "go": "cf481dc6-d303-4941-ac17-1f7de785f259"
+        },
+        "driverExitSound": null,
+        "horn": "sounds/horn.sound",
+        "leftFrontHeadlight": {
+          "_type": "gameobject",
+          "go": "fd33e865-5490-4ff7-aa80-768ed4323f71"
+        },
+        "leftFrontLight": {
+          "_type": "gameobject",
+          "go": "97f2de01-5a6b-4e16-9d0e-4900a4a89ea4"
+        },
+        "OnComponentDestroy": null,
+        "OnComponentDisabled": null,
+        "OnComponentEnabled": null,
+        "OnComponentFixedUpdate": null,
+        "OnComponentStart": null,
+        "OnComponentUpdate": null,
+        "rightFrontHeadlight": {
+          "_type": "gameobject",
+          "go": "ac8214e5-3fa5-4799-b4f1-ceb4d4d73835"
+        },
+        "rightFrontLight": {
+          "_type": "gameobject",
+          "go": "fd33e865-5490-4ff7-aa80-768ed4323f71"
+        },
+        "vehicleExplosionSound": "sounds/explosion.sound",
+        "vehicleHitSound": "sounds/damage.sound"
+      }
+    ],
+    "Children": [
+      {
+        "__guid": "299d5e0c-0473-4ce2-8cfe-88fbd6ddc153",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "chassis_axle_front",
+        "Position": "70.4,0,15.6",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 1,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "2b8bfe18-6802-4b6c-ae3e-4d2b05cbcee7",
+            "__enabled": false,
+            "Flags": 0,
+            "AnimationGraph": null,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": false,
+            "CreateBoneObjects": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": null,
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "Name": null,
+              "Looping": true,
+              "Blending": false
+            },
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "8538ef57-8a31-4d62-9861-5d5fa2c2e82b",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "wheel0",
+            "Position": "0,-33,0.000003814697",
+            "Rotation": "0,0,-0.7071068,0.7071068",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.SkinnedModelRenderer",
+                "__guid": "ca85e85f-0f08-4705-9b79-7004859bf21b",
+                "__enabled": true,
+                "Flags": 0,
+                "AnimationGraph": null,
+                "BodyGroups": 18446744073709551615,
+                "BoneMergeTarget": null,
+                "CreateAttachments": false,
+                "CreateBoneObjects": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/togg_sedan_vehicle_wheel.vmdl",
+                "Morphs": {},
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "Parameters": {
+                  "bools": {},
+                  "ints": {},
+                  "floats": {},
+                  "vectors": {},
+                  "rotations": {}
+                },
+                "PlaybackRate": 1,
+                "RenderOptions": {
+                  "GameLayer": true,
+                  "OverlayLayer": false,
+                  "BloomLayer": false,
+                  "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Sequence": {
+                  "Name": null,
+                  "Looping": true,
+                  "Blending": false
+                },
+                "Tint": "1,1,1,1",
+                "UseAnimGraph": true
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "2f207987-5c08-4b65-ae16-90720f15f17d",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "wheel1",
+            "Position": "0,33,0.000003814697",
+            "Rotation": "0,0,0.7071068,0.7071068",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.SkinnedModelRenderer",
+                "__guid": "4b2e346b-4d9a-4a1e-bc81-a4621a0bff28",
+                "__enabled": true,
+                "Flags": 0,
+                "AnimationGraph": null,
+                "BodyGroups": 18446744073709551615,
+                "BoneMergeTarget": null,
+                "CreateAttachments": false,
+                "CreateBoneObjects": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/togg_sedan_vehicle_wheel.vmdl",
+                "Morphs": {},
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "Parameters": {
+                  "bools": {},
+                  "ints": {},
+                  "floats": {},
+                  "vectors": {},
+                  "rotations": {}
+                },
+                "PlaybackRate": 1,
+                "RenderOptions": {
+                  "GameLayer": true,
+                  "OverlayLayer": false,
+                  "BloomLayer": false,
+                  "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Sequence": {
+                  "Name": null,
+                  "Looping": true,
+                  "Blending": false
+                },
+                "Tint": "1,1,1,1",
+                "UseAnimGraph": true
+              }
+            ],
+            "Children": []
+          }
+        ]
+      },
+      {
+        "__guid": "04de7d49-be6b-4a83-a52e-b9a31f85a3e7",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "chassis_axle_rear",
+        "Position": "-54,0,15.6",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 1,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.SkinnedModelRenderer",
+            "__guid": "4a80cfeb-efe5-4953-8344-4fba3c457d3b",
+            "__enabled": false,
+            "Flags": 0,
+            "AnimationGraph": null,
+            "BodyGroups": 18446744073709551615,
+            "BoneMergeTarget": null,
+            "CreateAttachments": false,
+            "CreateBoneObjects": false,
+            "LodOverride": null,
+            "MaterialGroup": null,
+            "MaterialOverride": null,
+            "Materials": null,
+            "Model": null,
+            "Morphs": {},
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Parameters": {
+              "bools": {},
+              "ints": {},
+              "floats": {},
+              "vectors": {},
+              "rotations": {}
+            },
+            "PlaybackRate": 1,
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": false,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderType": "On",
+            "Sequence": {
+              "Name": null,
+              "Looping": true,
+              "Blending": false
+            },
+            "Tint": "1,1,1,1",
+            "UseAnimGraph": true
+          }
+        ],
+        "Children": [
+          {
+            "__guid": "bc1fdba5-2b8f-4489-ad2c-e5d1fa4780f8",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "wheel2",
+            "Position": "0,33,0",
+            "Rotation": "0,0,0.7071068,0.7071068",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.SkinnedModelRenderer",
+                "__guid": "973f8b7a-8134-4b9b-8d17-27009b690f80",
+                "__enabled": true,
+                "Flags": 0,
+                "AnimationGraph": null,
+                "BodyGroups": 18446744073709551615,
+                "BoneMergeTarget": null,
+                "CreateAttachments": false,
+                "CreateBoneObjects": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/togg_sedan_vehicle_wheel.vmdl",
+                "Morphs": {},
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "Parameters": {
+                  "bools": {},
+                  "ints": {},
+                  "floats": {},
+                  "vectors": {},
+                  "rotations": {}
+                },
+                "PlaybackRate": 1,
+                "RenderOptions": {
+                  "GameLayer": true,
+                  "OverlayLayer": false,
+                  "BloomLayer": false,
+                  "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Sequence": {
+                  "Name": null,
+                  "Looping": true,
+                  "Blending": false
+                },
+                "Tint": "1,1,1,1",
+                "UseAnimGraph": true
+              }
+            ],
+            "Children": []
+          },
+          {
+            "__guid": "3a177d23-7131-47c6-bc2e-dd23a9c5fce8",
+            "__version": 2,
+            "Flags": 0,
+            "Name": "wheel3",
+            "Position": "0,-33,0",
+            "Rotation": "0,-0,-0.7071068,0.7071068",
+            "Scale": "1,1,1",
+            "Tags": "",
+            "Enabled": true,
+            "NetworkMode": 2,
+            "NetworkFlags": 0,
+            "NetworkOrphaned": 0,
+            "NetworkTransmit": true,
+            "OwnerTransfer": 1,
+            "Components": [
+              {
+                "__type": "Sandbox.SkinnedModelRenderer",
+                "__guid": "3a284fb0-6545-45cf-9c80-16b8124965c3",
+                "__enabled": true,
+                "Flags": 0,
+                "AnimationGraph": null,
+                "BodyGroups": 18446744073709551615,
+                "BoneMergeTarget": null,
+                "CreateAttachments": false,
+                "CreateBoneObjects": false,
+                "LodOverride": null,
+                "MaterialGroup": null,
+                "MaterialOverride": null,
+                "Materials": null,
+                "Model": "models/togg_sedan_vehicle_wheel.vmdl",
+                "Morphs": {},
+                "OnComponentDestroy": null,
+                "OnComponentDisabled": null,
+                "OnComponentEnabled": null,
+                "OnComponentFixedUpdate": null,
+                "OnComponentStart": null,
+                "OnComponentUpdate": null,
+                "Parameters": {
+                  "bools": {},
+                  "ints": {},
+                  "floats": {},
+                  "vectors": {},
+                  "rotations": {}
+                },
+                "PlaybackRate": 1,
+                "RenderOptions": {
+                  "GameLayer": true,
+                  "OverlayLayer": false,
+                  "BloomLayer": false,
+                  "AfterUILayer": false
+                },
+                "RenderType": "On",
+                "Sequence": {
+                  "Name": null,
+                  "Looping": true,
+                  "Blending": false
+                },
+                "Tint": "1,1,1,1",
+                "UseAnimGraph": true
+              }
+            ],
+            "Children": []
+          }
+        ]
+      },
+      {
+        "__guid": "cf481dc6-d303-4941-ac17-1f7de785f259",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "driver_exit_point",
+        "Position": "7.382105,60.71252,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [],
+        "Children": []
+      },
+      {
+        "__guid": "97f2de01-5a6b-4e16-9d0e-4900a4a89ea4",
+        "__version": 2,
+        "__Prefab": "entity/frontlight.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Name",
+              "Value": "leftfrontlight"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Position",
+              "Value": "97.03389,29.30028,32.78493"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Enabled",
+              "Value": false
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "b3475449-94ce-4948-8fc1-083e73cc39cb"
+              },
+              "Property": "Radius",
+              "Value": 400
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "3318f343-8923-42f9-aa59-88ea4a06bc42": "97f2de01-5a6b-4e16-9d0e-4900a4a89ea4",
+          "6b7cc605-146d-42bf-b813-387e75f81f8a": "2f2ff7f9-ca5e-4a55-ae8e-06c5bc1bd6be",
+          "b3475449-94ce-4948-8fc1-083e73cc39cb": "5b66e8ec-31ab-438f-88f2-2965c9ce1625"
+        }
+      },
+      {
+        "__guid": "fd33e865-5490-4ff7-aa80-768ed4323f71",
+        "__version": 2,
+        "__Prefab": "entity/frontlight.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Name",
+              "Value": "leftfrontheadlight"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Position",
+              "Value": "91.02882,34.40029,34.39068"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Enabled",
+              "Value": false
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "b3475449-94ce-4948-8fc1-083e73cc39cb"
+              },
+              "Property": "Attenuation",
+              "Value": 4.5
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "b3475449-94ce-4948-8fc1-083e73cc39cb"
+              },
+              "Property": "Radius",
+              "Value": 1000
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "3318f343-8923-42f9-aa59-88ea4a06bc42": "fd33e865-5490-4ff7-aa80-768ed4323f71",
+          "6b7cc605-146d-42bf-b813-387e75f81f8a": "d849573f-ec36-4b0d-bf01-71d9c88073bc",
+          "b3475449-94ce-4948-8fc1-083e73cc39cb": "35a7cd0b-8226-4d7b-9aca-855728f068b2"
+        }
+      },
+      {
+        "__guid": "ce241dcb-6397-4e16-a0d7-3492f381f390",
+        "__version": 2,
+        "__Prefab": "entity/frontlight.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Name",
+              "Value": "rightfrontlight"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Position",
+              "Value": "97.89679,-26.62837,32.95218"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Enabled",
+              "Value": false
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "b3475449-94ce-4948-8fc1-083e73cc39cb"
+              },
+              "Property": "Radius",
+              "Value": 400
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "3318f343-8923-42f9-aa59-88ea4a06bc42": "ce241dcb-6397-4e16-a0d7-3492f381f390",
+          "6b7cc605-146d-42bf-b813-387e75f81f8a": "5b2d44df-b283-4248-a908-08434e830aba",
+          "b3475449-94ce-4948-8fc1-083e73cc39cb": "e5910349-2c16-4302-841c-7620723dba90"
+        }
+      },
+      {
+        "__guid": "ac8214e5-3fa5-4799-b4f1-ceb4d4d73835",
+        "__version": 2,
+        "__Prefab": "entity/frontlight.prefab",
+        "__PrefabInstancePatch": {
+          "AddedObjects": [],
+          "RemovedObjects": [],
+          "PropertyOverrides": [
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Name",
+              "Value": "rightfrontheadlight"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Position",
+              "Value": "91.24004,-32.50462,34.391"
+            },
+            {
+              "Target": {
+                "Type": "GameObject",
+                "IdValue": "3318f343-8923-42f9-aa59-88ea4a06bc42"
+              },
+              "Property": "Enabled",
+              "Value": false
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "b3475449-94ce-4948-8fc1-083e73cc39cb"
+              },
+              "Property": "Attenuation",
+              "Value": 4.5
+            },
+            {
+              "Target": {
+                "Type": "Component",
+                "IdValue": "b3475449-94ce-4948-8fc1-083e73cc39cb"
+              },
+              "Property": "Radius",
+              "Value": 1000
+            }
+          ],
+          "MovedObjects": []
+        },
+        "__PrefabIdToInstanceId": {
+          "3318f343-8923-42f9-aa59-88ea4a06bc42": "ac8214e5-3fa5-4799-b4f1-ceb4d4d73835",
+          "6b7cc605-146d-42bf-b813-387e75f81f8a": "c7c408c2-b51b-4986-b166-eb29a9b68319",
+          "b3475449-94ce-4948-8fc1-083e73cc39cb": "85cd0731-36b8-491d-b32c-c3cb57f0298d"
+        }
+      },
+      {
+        "__guid": "cd03d552-af06-46f4-9fc2-a4e222a22859",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "dashboard",
+        "Position": "0,0,0",
+        "Rotation": "0,0,0,1",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 1,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.ScreenPanel",
+            "__guid": "a268b476-52bd-478e-baa0-a4c83c73985e",
+            "__enabled": true,
+            "Flags": 0,
+            "AutoScreenScale": true,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "Opacity": 1,
+            "Scale": 1,
+            "ScaleStrategy": "ConsistentHeight",
+            "TargetCamera": null,
+            "ZIndex": 100
+          },
+          {
+            "__type": "Sandbox.CarDashboard",
+            "__guid": "d62f71fa-84a7-4421-bf8f-31cd2fcd298d",
+            "__enabled": true,
+            "Flags": 0,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          }
+        ],
+        "Children": []
+      },
+      {
+        "__guid": "c4d43ce7-3b3b-4055-a8f5-bdb42f249ee0",
+        "__version": 2,
+        "Flags": 0,
+        "Name": "driver_enter_point_tag",
+        "Position": "0.8799652,41.07038,39.47123",
+        "Rotation": "0,0,0.7071068,0.7071068",
+        "Scale": "1,1,1",
+        "Tags": "",
+        "Enabled": true,
+        "NetworkMode": 2,
+        "NetworkFlags": 0,
+        "NetworkOrphaned": 0,
+        "NetworkTransmit": true,
+        "OwnerTransfer": 1,
+        "Components": [
+          {
+            "__type": "Sandbox.WorldPanel",
+            "__guid": "45962189-d255-4976-ae76-7125a50e4ab7",
+            "__enabled": true,
+            "Flags": 0,
+            "HorizontalAlign": "Center",
+            "InteractionRange": 1000,
+            "LookAtCamera": true,
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null,
+            "PanelSize": "300,50",
+            "RenderOptions": {
+              "GameLayer": true,
+              "OverlayLayer": true,
+              "BloomLayer": false,
+              "AfterUILayer": false
+            },
+            "RenderScale": 1,
+            "VerticalAlign": "Center"
+          },
+          {
+            "__type": "Sandbox.InfoTag",
+            "__guid": "7e5ed346-5eab-4fe2-babf-fb220e9a8a3e",
+            "__enabled": true,
+            "Flags": 0,
+            "Info": "Enter",
+            "OnComponentDestroy": null,
+            "OnComponentDisabled": null,
+            "OnComponentEnabled": null,
+            "OnComponentFixedUpdate": null,
+            "OnComponentStart": null,
+            "OnComponentUpdate": null
+          }
+        ],
+        "Children": []
+      }
+    ],
+    "__properties": {
+      "NetworkInterpolation": true,
+      "TimeScale": 1,
+      "WantsSystemScene": true,
+      "Metadata": {},
+      "NavMesh": {
+        "Enabled": false,
+        "IncludeStaticBodies": true,
+        "IncludeKeyframedBodies": true,
+        "EditorAutoUpdate": true,
+        "AgentHeight": 64,
+        "AgentRadius": 16,
+        "AgentStepSize": 18,
+        "AgentMaxSlope": 40,
+        "ExcludedBodies": "",
+        "IncludedBodies": ""
+      }
+    },
+    "__variables": []
+  },
+  "ResourceVersion": 2,
+  "ShowInMenu": false,
+  "MenuPath": null,
+  "MenuIcon": null,
+  "DontBreakAsTemplate": false,
+  "__references": [],
+  "__version": 2
+}

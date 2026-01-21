@@ -1,0 +1,8 @@
+{
+  "Prefab": "entity/togg_sedan.prefab",
+  "Title": "Togg Sedan Car\n",
+  "Description": "Togg Sedan Car Addon (Experimental)",
+  "IncludeCode": true,
+  "__references": [],
+  "__version": 0
+}

@@ -1,0 +1,34 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+@namespace Sandbox
+
+@if (!render) return;
+<root>
+    <div style="background-color:gray;border-radius:5px;opacity:0.2;padding:1px"> 
+	<div style="font-size: 16px;font-family: Poppins;color: #fff;opacity:0.6">@Info</div>
+    </div>
+</root>
+
+@code
+{
+    private ToggSedan Car { get; set; }   
+	[Property, TextArea] public string Info { get; set; }
+    private bool render = true;
+    protected override void OnEnabled(){
+        base.OnEnabled();
+        Car = GameObject.Parent.GetComponent<ToggSedan>();
+    }
+    protected override void OnUpdate(){
+        base.OnUpdate();
+
+        if(Car == null || !Car.IsValid() || Car.AmIDriver())
+        {
+            render = false;
+            return;
+        }
+        
+        render = Connection.Local.DistanceSquared( GameObject.WorldPosition ) < 100*100;
+    }
+	protected override int BuildHash() => System.HashCode.Combine( render );
+}

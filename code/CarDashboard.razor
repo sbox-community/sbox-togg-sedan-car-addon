@@ -1,0 +1,102 @@
+@using System;
+@using Sandbox;
+@using Sandbox.UI;
+
+@inherits PanelComponent
+@if (!Car.AmIDriver()) return;
+
+<style>
+CarDashboard {
+    margin:10px;
+	width: 100%;
+	height: 100%;
+	flex-direction:column;
+	top:25%;
+	left: 1%;
+    font-size: 18px;
+
+    .info
+    {
+		text-shadow: 1px 1px 1px 1px black;
+		color: gray;
+		font-size: 24px;
+		opacity:0.5;
+		padding-bottom:10px;
+        margin-bottom:20px;
+	}
+	.info2 {
+		text-shadow: 1px 1px 1px 1px black;
+		color: white;
+		font-size: 20px;
+		opacity:0.5;
+		padding-bottom:10px;
+	}
+	.frontlight
+	{
+		//background-image: url("/materials/togg_sedan_vehicle/features/front_lights.png");
+		//background-repeat: no-repeat;
+		text-shadow: 1px 1px 1px 1px black;
+		&.True{
+			color: green;
+			sound-in: ui.popup.message.open;
+		}
+		&.False{
+			color: red;
+			sound-in: ui.popup.message.close;
+		}
+	}
+    .horn
+	{
+		text-shadow: 1px 1px 1px 1px black;
+        color: red;
+		&:active{
+			color: green;
+			sound-in: ui.button.over;
+		}
+	}
+	.experimentalcamera {
+		text-shadow: 1px 1px 1px 1px black;
+		&.True
+		{
+			color: green;
+			sound-in: ui.popup.message.open;
+		}
+		&.False {
+			color: red;
+			sound-in: ui.popup.message.close;
+		}
+	}
+}
+</style>
+
+<div class="info">Togg Sedan</div>
+<div class="info2">Press 'ALT' to enable cursor</div>
+<div class="frontlight @(Car.shortLights)"><button tooltip="Front Lights" active=@(Car.shortLights) @onclick=@(() => frontLightSwitch() )>Front Lights: @(Car.shortLights ? "On" : "Off")</button></div>
+<div class="frontlight @(Car.headLights)"><button tooltip="Headlights" active=@(Car.headLights) @onclick=@(() => headlightSwitch() )>Headlights: @(Car.headLights ? "On" : "Off")</button></div>
+<div class="horn"><button tooltip="Horn" @onclick=@(() => horn() )>Horn</button></div>
+<div class="experimentalcamera @(Car.experimental_camera)"><button tooltip="Experimental Camera" active=@(Car.experimental_camera) @onclick=@(() => experimentalCameraSwitch() )>Experimental Camera: @(Car.experimental_camera ? "On" : "Off")</button></div>
+
+@code
+{
+	private ToggSedan Car { get; set; }
+
+    protected override void OnEnabled(){
+        base.OnEnabled();
+        Car = GameObject.Parent.GetComponent<ToggSedan>();
+    }
+	protected override void OnUpdate()
+	{
+        base.OnUpdate();
+		Panel.Style.PointerEvents = Input.Down("walk") ? PointerEvents.All :  PointerEvents.None;
+	}
+
+	public void frontLightSwitch() => Car.featuresHandler(0);
+	public void headlightSwitch() => Car.featuresHandler(1);
+	public void horn() => Car.featuresHandler(2);
+	public void experimentalCameraSwitch() => Car.featuresHandler(3);
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(Car, Car.AmIDriver(), Car.shortLights, Car.headLights, Car.experimental_camera);
+	}
+}

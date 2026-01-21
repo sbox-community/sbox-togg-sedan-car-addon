@@ -1,0 +1,137 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc30:version{8c2d7a91-9c42-4bf0-883a-5a3b1762d4f1} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "body_roof_color.vmat"
+								to = "materials/togg_sedan_vehicle/body_roof_color.vmat"
+							},
+							{
+								from = "car_glass_fenst_1.vmat"
+								to = "materials/togg_sedan_vehicle/car_glass_fenst_1.vmat"
+							},
+							{
+								from = "body_roof_solar.vmat"
+								to = "materials/togg_sedan_vehicle/body_roof_sonar.vmat"
+							},
+							{
+								from = "grill__dots.vmat"
+								to = "materials/togg_sedan_vehicle/grill_dots.vmat"
+							},
+							{
+								from = "grill__a2.vmat"
+								to = "materials/togg_sedan_vehicle/grill_a2.vmat"
+							},
+							{
+								from = "body_chrome.vmat"
+								to = "materials/togg_sedan_vehicle/body_chrome.vmat"
+							},
+							{
+								from = "body_light.vmat"
+								to = "materials/togg_sedan_vehicle/body_light.vmat"
+							},
+							{
+								from = "body_dark_plastic.vmat"
+								to = "materials/togg_sedan_vehicle/body_dark_plastic.vmat"
+							},
+							{
+								from = "_glas_sw2.vmat"
+								to = "materials/togg_sedan_vehicle/_glas_sw2.vmat"
+							},
+							{
+								from = "body_gr_0.001.vmat"
+								to = "materials/togg_sedan_vehicle/body_gr_0.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						filename = "models/fbx/togg_lastiksiz.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 90.0, 0.0 ]
+						import_scale = 0.4
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsHullFile"
+						name = "togg_physics"
+						parent_bone = ""
+						surface_prop = "metal"
+						collision_tags = "solid"
+						recenter_on_parent_bone = false
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 90.0, 0.0 ]
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						filename = "models/fbx/togg_physics.fbx"
+						import_scale = 0.4
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "PhysicsBodyMarkupList"
+				children = 
+				[
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "undefined"
+						mass_override = 2000.0
+						inertia_scale = 1.0
+						linear_damping = 0.0
+						angular_damping = 0.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+						gravity_scale = 1.0
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+		base_model_name = ""
+	}
+}

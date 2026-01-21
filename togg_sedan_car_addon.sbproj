@@ -1,0 +1,17 @@
+{
+  "Title": "Togg Sedan Car Addon",
+  "Type": "addon",
+  "Org": "local",
+  "Ident": "togg_sedan_car_addon",
+  "Schema": 1,
+  "IncludeSourceFiles": false,
+  "Resources": null,
+  "PackageReferences": [],
+  "EditorReferences": null,
+  "Mounts": null,
+  "IsStandaloneOnly": false,
+  "Metadata": {
+    "StartupScene": "scenes/sandbox.scene",
+    "ParentPackage": "facepunch.sandbox"
+  }
+}
