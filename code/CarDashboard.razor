@@ -87,7 +87,8 @@ CarDashboard {
 	protected override void OnUpdate()
 	{
         base.OnUpdate();
-		Panel.Style.PointerEvents = Input.Down("walk") ? PointerEvents.All :  PointerEvents.None;
+        if(Panel != null && Panel.IsValid())
+		    Panel.Style.PointerEvents = Input.Down("walk") ? PointerEvents.All :  PointerEvents.None;
 	}
 
 	public void frontLightSwitch() => Car.featuresHandler(0);
